@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Milk &amp; Cookies — A Garrison Village Adventure (1999)</title>
+<meta name="description" content="A first-person point-and-click adventure. Niagara-on-the-Lake, Ontario, October 1999.">
+<link rel="icon" href="assets/items/cookie.png">
+<link rel="stylesheet" href="assets/fonts/fonts.css">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/win98.css">
+</head>
+<body>
+<noscript><p style="color:#fff;padding:2em">This game needs JavaScript.</p></noscript>
+
+<!-- ======================= TITLE ======================= -->
+<section id="title" class="screen active">
+  <div class="title-bg"></div>
+  <div class="title-inner">
+    <div class="title-kicker">Niagara-on-the-Lake, Ontario &middot; October 1999</div>
+    <h1 class="title-logo">Milk <span>&amp;</span> Cookies</h1>
+    <div class="title-sub">A Garrison Village Adventure</div>
+    <div class="title-menu">
+      <button id="btn-new" class="tbtn">New Game</button>
+      <button id="btn-continue" class="tbtn">Continue</button>
+      <button id="btn-load" class="tbtn">Load Game</button>
+      <button id="btn-endings" class="tbtn">Endings</button>
+      <button id="btn-howto" class="tbtn">How to Play</button>
+    </div>
+    <div class="title-foot">Click to begin &middot; Best with sound on &middot; <span id="ending-count"></span></div>
+  </div>
+</section>
+
+<!-- ======================= INTRO ======================= -->
+<section id="intro" class="screen">
+  <div class="intro-bg"></div>
+  <div class="intro-text" id="intro-text"></div>
+  <button class="intro-skip" id="intro-skip">Skip &raquo;</button>
+</section>
+
+<!-- ======================= GAME ======================= -->
+<section id="game" class="screen">
+  <header id="topbar">
+    <div class="tb-logo">Milk <span>&amp;</span> Cookies</div>
+    <div class="tb-date" id="tb-date">Thursday, October 14, 1999</div>
+    <div class="tb-phase" id="tb-phase">Evening</div>
+    <div class="tb-spacer"></div>
+    <button class="tb-btn" id="tb-hint" title="Highlight hotspots (H / Space)">&#9678; Hotspots</button>
+    <button class="tb-btn" id="tb-sound" title="Sound (M)">&#9835; Sound</button>
+    <button class="tb-btn" id="tb-save" title="Save / Load">&#128190; Save</button>
+    <button class="tb-btn" id="tb-menu" title="Menu (Esc)">&#9776; Menu</button>
+  </header>
+
+  <div id="main">
+    <div id="left">
+      <div class="win" id="viewwin">
+        <div class="win-title"><span class="wt-stripes"></span><span id="scene-name">Den</span><span class="wt-stripes"></span></div>
+        <div id="viewport">
+          <img id="scene-img" alt="" draggable="false">
+          <div id="scene-layers"></div>
+          <div id="hotspots"></div>
+          <div id="hover-label"></div>
+          <div id="fade"></div>
+          <div id="dialog" class="hidden">
+            <div class="dlg-portrait"><img id="dlg-img" alt=""></div>
+            <div class="dlg-box">
+              <div class="dlg-name" id="dlg-name"></div>
+              <div class="dlg-text" id="dlg-text"></div>
+              <div class="dlg-choices" id="dlg-choices"></div>
+            </div>
+          </div>
+          <div id="closeup" class="hidden"><img id="closeup-img" alt=""><div id="closeup-cap"></div></div>
+          <div id="computer" class="hidden"></div>
+        </div>
+      </div>
+      <div id="verbbar">
+        <div id="verbs"></div>
+        <div id="command"><span id="cmd-text">&nbsp;</span></div>
+      </div>
+      <div class="win" id="textwin">
+        <div id="log" aria-live="polite"></div>
+      </div>
+    </div>
+    <div id="right">
+      <div class="win" id="mapwin">
+        <div class="win-title"><span class="wt-stripes"></span><span>Exits</span><span class="wt-stripes"></span></div>
+        <div id="map"></div>
+      </div>
+      <div class="win" id="invwin">
+        <div class="win-title"><span class="wt-stripes"></span><span>Inventory</span><span class="wt-stripes"></span></div>
+        <div id="inventory"></div>
+        <div id="selfbtn-wrap"><button id="selfbtn" title="Use on yourself">&#9786; Self</button><button id="backbtn" title="Step back (Backspace)">&#8617; Back</button></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= ENDING ======================= -->
+<section id="ending" class="screen">
+  <div class="end-img-wrap"><img id="end-img" alt=""><div id="end-news" class="hidden"></div></div>
+  <div class="end-panel">
+    <div class="end-kicker" id="end-kicker">Ending</div>
+    <h2 class="end-title" id="end-title"></h2>
+    <div class="end-text" id="end-text"></div>
+    <div class="end-tally" id="end-tally"></div>
+    <div class="end-buttons">
+      <button class="tbtn" id="end-rewind">Rewind</button>
+      <button class="tbtn" id="end-load">Load Game</button>
+      <button class="tbtn" id="end-title-btn">Title Screen</button>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= BSOD ======================= -->
+<section id="bsod" class="screen">
+  <div class="bsod-inner">
+    <div class="bsod-head">&nbsp;Windows&nbsp;</div>
+    <p>A fatal exception 0E has occurred at 0028:C0011E36 in VXD VMM(01) + 00010E36. The current application will be terminated.</p>
+    <p>*&nbsp; Press any key to terminate the current application.<br>*&nbsp; Press CTRL+ALT+DEL again to restart your computer. You will lose any unsaved information in all applications.</p>
+    <p class="bsod-c">Press any key to continue <span class="blink">_</span></p>
+  </div>
+</section>
+
+<!-- ======================= MODALS ======================= -->
+<div id="modal" class="hidden"><div class="modal-box"><div class="modal-title" id="modal-title"></div><div class="modal-body" id="modal-body"></div><div class="modal-btns" id="modal-btns"></div></div></div>
+<div id="toast"></div>
+
+<script src="js/hotspots.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/engine.js"></script>
+<script src="js/computer.js"></script>
+<script src="js/content/items.js"></script>
+<script src="js/content/scenes_up.js"></script>
+<script src="js/content/scenes_down.js"></script>
+<script src="js/content/school.js"></script>
+<script src="js/content/dialogs.js"></script>
+<script src="js/content/story.js"></script>
+<script src="js/content/web.js"></script>
+<script>Game.boot();</script>
+</body>
+</html>

@@ -1,0 +1,138 @@
+/* ==========================================================================
+   Gateway 2000 / Windows 98 simulation
+   ========================================================================== */
+#computer { position: absolute; inset: 0; z-index: 30; background: radial-gradient(ellipse at 50% 40%, #1a1b22, #050507 70%); display: flex; align-items: center; justify-content: center; animation: fadein .3s; }
+.crt-bezel { position: relative; background: linear-gradient(160deg, #e9e2cf, #cfc6ad 60%, #b9b097); padding: 3.2% 3.6% 5.5%; border-radius: 22px; box-shadow: 0 20px 50px rgba(0,0,0,.8), inset 0 2px 0 #fff8, inset 0 -3px 6px #0003; }
+.crt-bezel::after { content: 'GATEWAY 2000'; position: absolute; bottom: 1.6%; left: 0; right: 0; text-align: center; font: bold 10px Arial, sans-serif; letter-spacing: .3em; color: #7d755f; }
+.crt-led { position: absolute; right: 7%; bottom: 2%; width: 7px; height: 7px; border-radius: 50%; background: #3f3; box-shadow: 0 0 6px #3f3; }
+.crt-glass { position: relative; overflow: hidden; border-radius: 14px / 12px; background: #000; box-shadow: inset 0 0 30px rgba(0,0,0,.9); }
+.crt-glass::after { content: ''; pointer-events: none; position: absolute; inset: 0; border-radius: inherit; background: repeating-linear-gradient(0deg, rgba(0,0,0,.09) 0 1px, transparent 1px 3px), radial-gradient(ellipse at 50% 50%, transparent 60%, rgba(0,0,0,.35)); z-index: 999; }
+.crt-glass::before { content: ''; pointer-events: none; position: absolute; inset: 0; z-index: 1000; background: linear-gradient(130deg, rgba(255,255,255,.07), transparent 35%); }
+.w98 { position: absolute; left: 0; top: 0; width: 640px; height: 480px; transform-origin: 0 0; background: #008080; font: 11px Tahoma, 'MS Sans Serif', Verdana, Geneva, sans-serif; color: #000; overflow: hidden; cursor: default; user-select: none; -webkit-font-smoothing: none; }
+.stand-up { position: absolute; right: 14px; bottom: 12px; z-index: 40; font-family: var(--ui); font-size: 11px; padding: 6px 10px; background: rgba(12,14,23,.85); color: #e9dcb9; border: 1px solid #6b5f4a; cursor: pointer; }
+.stand-up:hover { background: var(--red); color: #fff; }
+
+/* desktop icons */
+.w98 .icons { position: absolute; left: 6px; top: 6px; display: grid; grid-auto-flow: column; grid-template-rows: repeat(6, 70px); gap: 2px 8px; }
+.w98 .ico { width: 70px; text-align: center; color: #fff; padding: 2px; cursor: pointer; }
+.w98 .ico .g { width: 32px; height: 32px; margin: 0 auto 3px; display: flex; align-items: center; justify-content: center; font-size: 26px; line-height: 1; filter: drop-shadow(1px 1px 0 #0006); }
+.w98 .ico span { display: inline-block; padding: 0 2px; font-size: 11px; line-height: 13px; }
+.w98 .ico:hover span, .w98 .ico.sel span { background: #000080; outline: 1px dotted #ff0; }
+
+/* taskbar */
+.w98 .taskbar { position: absolute; left: 0; right: 0; bottom: 0; height: 28px; background: #c0c0c0; border-top: 1px solid #fff; box-shadow: inset 0 1px 0 #dfdfdf; display: flex; align-items: center; gap: 3px; padding: 2px; z-index: 500; }
+.w98 .btn { background: #c0c0c0; border: none; box-shadow: inset -1px -1px #0a0a0a, inset 1px 1px #fff, inset -2px -2px #808080, inset 2px 2px #dfdfdf; padding: 3px 8px; font: inherit; cursor: pointer; min-height: 22px; color: #000; }
+.w98 .btn:active, .w98 .btn.down { box-shadow: inset 1px 1px #0a0a0a, inset -1px -1px #fff, inset 2px 2px #808080, inset -2px -2px #dfdfdf; }
+.w98 .btn:disabled { color: #808080; text-shadow: 1px 1px #fff; cursor: default; }
+.w98 .start { font-weight: bold; display: flex; align-items: center; gap: 4px; padding: 2px 6px; }
+.w98 .start i { font-style: normal; display: inline-block; width: 16px; height: 14px; background: conic-gradient(from 0deg at 50% 50%, #f33 0 25%, #3c3 0 50%, #fc0 0 75%, #36f 0); transform: skewX(-8deg); }
+.w98 .tasks { flex: 1; display: flex; gap: 3px; overflow: hidden; }
+.w98 .task { max-width: 140px; flex: 1; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.w98 .tray { display: flex; align-items: center; gap: 5px; padding: 0 8px; height: 22px; box-shadow: inset 1px 1px #808080, inset -1px -1px #fff; }
+.w98 .tray .modem { width: 16px; height: 12px; position: relative; }
+.w98 .tray .modem b { position: absolute; top: 2px; width: 6px; height: 8px; background: #555; border: 1px solid #000; }
+.w98 .tray .modem b:first-child { left: 0; } .w98 .tray .modem b:last-child { right: 0; }
+.w98 .tray .modem.on b { background: #3f3; animation: modemblink .3s steps(1) infinite; } .w98 .tray .modem.on b:last-child { animation-delay: .15s; }
+@keyframes modemblink { 50% { background: #070; } }
+.w98 .tray .flower { width: 14px; height: 14px; border-radius: 50%; background: radial-gradient(circle, #e33 25%, transparent 26%), conic-gradient(#3b3 0 12.5%, #2a2 0 25%, #3b3 0 37.5%, #2a2 0 50%, #3b3 0 62.5%, #2a2 0 75%, #3b3 0 87.5%, #2a2 0); cursor: pointer; }
+.w98 .tray .flower.off { filter: grayscale(1) brightness(1.3); }
+.w98 .tray .flower.blink { animation: flowerblink .6s steps(1) infinite; }
+@keyframes flowerblink { 50% { filter: hue-rotate(180deg) brightness(1.5); } }
+
+/* start menu */
+.w98 .startmenu { position: absolute; left: 2px; bottom: 28px; width: 190px; background: #c0c0c0; box-shadow: inset -1px -1px #0a0a0a, inset 1px 1px #dfdfdf, inset -2px -2px #808080, inset 2px 2px #fff; display: flex; z-index: 600; padding: 2px; }
+.w98 .startmenu .side { width: 22px; background: linear-gradient(0deg, #000080, #1084d0); color: #c0c0c0; writing-mode: vertical-rl; transform: rotate(180deg); font: bold 15px Arial; padding: 6px 0; }
+.w98 .startmenu .side b { color: #fff; }
+.w98 .startmenu ul { list-style: none; margin: 0; padding: 0; flex: 1; }
+.w98 .startmenu li { padding: 6px 8px; display: flex; align-items: center; gap: 8px; cursor: pointer; }
+.w98 .startmenu li:hover { background: #000080; color: #fff; }
+.w98 .startmenu li.sep { padding: 0; height: 0; border-top: 1px solid #808080; border-bottom: 1px solid #fff; margin: 3px 2px; }
+
+/* windows */
+.w98 .win { position: absolute; border: none; background: #c0c0c0; box-shadow: inset -1px -1px #0a0a0a, inset 1px 1px #dfdfdf, inset -2px -2px #808080, inset 2px 2px #fff; padding: 3px; display: flex; flex-direction: column; min-width: 120px; color: #000; }
+.w98 .tbar { height: 18px; background: linear-gradient(90deg, #808080, #b5b5b5); color: #c0c0c0; display: flex; align-items: center; padding: 0 2px 0 4px; font-weight: bold; gap: 4px; flex: 0 0 auto; cursor: move; }
+.w98 .win.active .tbar { background: linear-gradient(90deg, #000080, #1084d0); color: #fff; }
+.w98 .tbar .tt { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.w98 .tbar .x { width: 16px; height: 14px; padding: 0; min-height: 0; font: bold 10px/12px Arial; text-align: center; }
+.w98 .menubar { display: flex; gap: 2px; padding: 1px 0; flex: 0 0 auto; }
+.w98 .menubar span { padding: 1px 6px; cursor: pointer; position: relative; }
+.w98 .menubar span:hover { background: #000080; color: #fff; }
+.w98 .menubar .dd { position: absolute; left: 0; top: 16px; background: #c0c0c0; min-width: 120px; box-shadow: inset -1px -1px #0a0a0a, inset 1px 1px #dfdfdf, inset -2px -2px #808080, inset 2px 2px #fff; padding: 2px; z-index: 50; color: #000; }
+.w98 .menubar .dd div { padding: 3px 14px; } .w98 .menubar .dd div:hover { background: #000080; color: #fff; }
+.w98 .body { flex: 1; display: flex; flex-direction: column; min-height: 0; }
+.w98 .sunk { background: #fff; box-shadow: inset 1px 1px #808080, inset -1px -1px #fff, inset 2px 2px #0a0a0a, inset -2px -2px #dfdfdf; padding: 3px; }
+.w98 .field { background: #fff; box-shadow: inset 1px 1px #808080, inset -1px -1px #fff, inset 2px 2px #0a0a0a, inset -2px -2px #dfdfdf; border: none; padding: 3px 4px; font: inherit; color: #000; outline: none; }
+.w98 textarea.field { resize: none; font: 12px 'Fixedsys', 'Courier New', monospace; line-height: 1.3; user-select: text; -webkit-user-select: text; }
+.w98 .status { height: 18px; box-shadow: inset 1px 1px #808080, inset -1px -1px #fff; padding: 2px 4px; margin-top: 2px; white-space: nowrap; overflow: hidden; flex: 0 0 auto; }
+.w98 .row { display: flex; gap: 6px; align-items: center; }
+.w98 .dlgbody { padding: 10px 12px; display: flex; flex-direction: column; gap: 8px; }
+.w98 .msgicon { font-size: 28px; line-height: 1; }
+
+/* netscape */
+.w98 .ns-tools { display: flex; gap: 2px; padding: 2px 0; flex: 0 0 auto; }
+.w98 .ns-tools .btn { padding: 1px 4px; display: flex; flex-direction: column; align-items: center; min-width: 38px; font-size: 10px; }
+.w98 .ns-tools .btn b { font-size: 14px; line-height: 16px; }
+.w98 .ns-logo { margin-left: auto; width: 40px; height: 36px; background: #000; color: #9cf; display: flex; align-items: center; justify-content: center; font: bold 24px Georgia; box-shadow: inset 1px 1px #808080; }
+.w98 .ns-logo.busy { animation: nsbusy .8s linear infinite; }
+@keyframes nsbusy { 0% { color: #9cf; } 50% { color: #fff; text-shadow: 0 0 6px #fff; } 100% { color: #9cf; } }
+.w98 .ns-loc { display: flex; gap: 4px; align-items: center; padding: 2px 0; flex: 0 0 auto; }
+.w98 .ns-loc input { flex: 1; }
+.w98 .ns-bm { display: flex; gap: 2px; padding: 1px 0 3px; flex-wrap: wrap; flex: 0 0 auto; }
+.w98 .ns-bm .btn { padding: 1px 5px; min-height: 18px; font-size: 10px; }
+.w98 .page { flex: 1; overflow: auto; background: #fff; font: 13px 'Times New Roman', Times, serif; color: #000; padding: 8px 10px; user-select: text; -webkit-user-select: text; }
+.w98 .page a { color: #00e; text-decoration: underline; cursor: pointer; }
+.w98 .page a:visited, .w98 .page a.v { color: #551a8b; }
+.w98 .page h1 { font-size: 22px; margin: 4px 0 8px; } .w98 .page h2 { font-size: 17px; margin: 10px 0 6px; } .w98 .page p { margin: 0 0 8px; } .w98 .page hr { border: none; border-top: 2px groove #ccc; }
+.w98 .page table { border-collapse: collapse; } .w98 .page td, .w98 .page th { padding: 3px 5px; vertical-align: top; }
+.w98 .page .center { text-align: center; }
+.w98 .page.dark { background: #000; color: #f22; } .w98 .page.dark a { color: #ff0; }
+.w98 .page .marquee { overflow: hidden; white-space: nowrap; } .w98 .page .marquee span { display: inline-block; padding-left: 100%; animation: marq 12s linear infinite; }
+@keyframes marq { to { transform: translateX(-100%); } }
+.w98 .page .uc { display: inline-block; background: repeating-linear-gradient(45deg, #ff0 0 8px, #000 8px 16px); color: #fff; font: bold 11px Arial; padding: 3px 8px; text-shadow: 1px 1px #000, -1px -1px #000; }
+.w98 .page .counter { font: bold 14px 'Courier New'; background: #000; color: #0f0; padding: 1px 4px; letter-spacing: 2px; }
+.w98 .page .hm-row { cursor: pointer; } .w98 .page .hm-row:hover td { background: #ffc; } .w98 .page .hm-row.unread td { font-weight: bold; }
+.w98 .page .av-box { border: 1px solid #999; padding: 6px; background: #f0f0ff; }
+.w98 .page .err { font: 12px Arial; }
+
+/* icq */
+.w98 .icq-list { flex: 1; overflow: auto; background: #fff; padding: 2px; }
+.w98 .icq-grp { font-weight: bold; color: #000080; padding: 3px 2px 1px; font-size: 10px; text-transform: uppercase; }
+.w98 .icq-c { display: flex; align-items: center; gap: 5px; padding: 2px 4px; cursor: pointer; }
+.w98 .icq-c:hover { background: #000080; color: #fff; }
+.w98 .icq-c .st { width: 10px; height: 10px; border-radius: 50%; background: #3b3; box-shadow: 0 0 0 1px #070 inset; } .w98 .icq-c .st.off { background: #c33; } .w98 .icq-c .st.away { background: #eb3; }
+.w98 .icq-c.blink { animation: icqblink .5s steps(1) infinite; } @keyframes icqblink { 50% { background: #ff0; } }
+.w98 .chat { flex: 1; overflow-y: auto; background: #fff; padding: 4px 6px; font: 12px Arial, sans-serif; user-select: text; -webkit-user-select: text; }
+.w98 .chat p { margin: 0 0 3px; } .w98 .chat .who { font-weight: bold; } .w98 .chat .me .who { color: #c00; } .w98 .chat .them .who { color: #00c; } .w98 .chat .sys { color: #888; font-style: italic; }
+.w98 .chat .typing { color: #888; font-style: italic; }
+.w98 .replies { flex: 0 0 auto; max-height: 130px; overflow-y: auto; display: flex; flex-direction: column; gap: 2px; padding-top: 3px; }
+.w98 .replies .btn { text-align: left; font-size: 11px; padding: 3px 6px; }
+
+/* winamp */
+.w98 .winamp { background: #232335; color: #0f0; font: 10px 'Courier New', monospace; padding: 0; }
+.w98 .winamp .tbar { background: linear-gradient(#4a4a6a, #2a2a3e); color: #ccc; }
+.w98 .winamp .wa-disp { background: #000; margin: 4px; padding: 6px; height: 46px; position: relative; border: 1px solid #555; }
+.w98 .winamp .wa-time { font: bold 20px 'Courier New'; color: #0f0; letter-spacing: 1px; }
+.w98 .winamp .wa-title { color: #0f0; white-space: nowrap; overflow: hidden; }
+.w98 .winamp .wa-viz { position: absolute; right: 6px; top: 6px; width: 76px; height: 32px; display: flex; align-items: flex-end; gap: 1px; }
+.w98 .winamp .wa-viz i { flex: 1; background: linear-gradient(0deg, #0c0, #ff0 70%, #f00); }
+.w98 .winamp .wa-ctl { display: flex; gap: 2px; padding: 0 4px 4px; align-items: center; }
+.w98 .winamp .wa-ctl .btn { padding: 0 6px; min-height: 16px; font-size: 10px; background: #bbb; }
+.w98 .winamp .wa-pl { background: #000; color: #0f0; margin: 0 4px 4px; padding: 3px; border: 1px solid #555; }
+.w98 .winamp .wa-pl div { cursor: pointer; padding: 1px 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .w98 .winamp .wa-pl div:hover, .w98 .winamp .wa-pl div.cur { background: #00f; color: #fff; }
+.w98 .winamp label { color: #ccc; display: flex; align-items: center; gap: 4px; }
+.w98 .winamp input[type=range] { width: 80px; }
+
+/* minesweeper */
+.w98 .ms-top { display: flex; justify-content: space-between; align-items: center; padding: 4px; margin-bottom: 4px; }
+.w98 .ms-led { background: #000; color: #f00; font: bold 18px 'Courier New'; padding: 0 3px; letter-spacing: 1px; }
+.w98 .ms-face { width: 26px; height: 26px; font-size: 16px; padding: 0; display: flex; align-items: center; justify-content: center; }
+.w98 .ms-grid { display: grid; grid-template-columns: repeat(9, 18px); }
+.w98 .ms-grid div { width: 18px; height: 18px; background: #c0c0c0; box-shadow: inset -2px -2px #808080, inset 2px 2px #fff; font: bold 12px Arial; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+.w98 .ms-grid div.o { box-shadow: inset 1px 1px #808080; }
+.w98 .ms-grid div.boom { background: #f00; }
+
+/* boot */
+.w98 .boot { position: absolute; inset: 0; background: #000; color: #aaa; font: 13px 'Courier New', monospace; padding: 14px; z-index: 900; white-space: pre-wrap; }
+.w98 .boot.splash { background: linear-gradient(#5e7fd8, #a4c2f4 60%, #ccdcf7); display: flex; align-items: center; justify-content: center; flex-direction: column; color: #fff; font: bold 32px Arial; text-shadow: 2px 2px #0004; }
+.w98 .boot.splash small { font: 13px Arial; margin-top: 10px; }
+.w98 .boot.safe { background: #000; color: #f80; display: flex; align-items: center; justify-content: center; font: bold 20px Arial; }
